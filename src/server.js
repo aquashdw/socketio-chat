@@ -15,6 +15,7 @@ const httpServer = http.createServer(app)
 const io = new Server(httpServer);
 
 io.on("connection", socket => {
+  socket.nickname = "Anonymous"
   // client sets username
   socket.on("set_nickname", () => {});
   // client enters room

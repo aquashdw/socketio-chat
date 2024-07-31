@@ -16,39 +16,46 @@ html(lang="en")
             h5(class="offcanvas-title")
             button(type="button", class="btn-close", data-bs-dismiss="offcanvas")
           div(class="offcanvas-body")
-            h2(class="mb-3") Nickname
-            form(class="form-control py-3 mb-4")
+            h2(class="nickname-head mb-3") Nickname: None
+            form(class="nickname-form form-control py-3 mb-4")
               div(class="mb-3")
                 label(for="nick-input-drawer", class="form-label") Enter Your Nickname
                 input(id="nick-input-drawer", class="form-control", type="text", required="true")
               button(class="btn btn-primary") Submit
             h2(class="mb-3") Rooms
-            ul(class="list-group")
+            ul(class="room-list list-group mb-3")
               button(class="list-group-item list-group-item-action") Room A
               button(class="list-group-item list-group-item-action") Room B
               button(class="list-group-item list-group-item-action") Room C
               button(class="list-group-item list-group-item-action") Room D
+            form(class="create-room-form w-100")
+              div(class="input-group")
+                input(type="text", class="form-control")
+                button(class="btn btn-primary") Create
         div(class="row justify-content-center h-100")
           // wide screen controls
-          aside(id="side-control", class="p-3 col-lg-3 col-md-5 d-md-block d-none")
-            h2(class="mb-3") Nickname
-            form(class="form-control py-3 mb-3")
+          aside(id="side-control", class="p-3 col-lg-4 col-md-5 d-md-block d-none mh-100 overflow-auto")
+            h2(class="nickname-head mb-3") Nickname: None
+            form(class="nickname-form form-control py-3 mb-3")
               div(class="mb-3")
                 label(for="nick-input-side", class="form-label") Enter Your Nickname
                 input(id="nick-input-side", class="form-control", type="text", required="true")
               button(class="btn btn-primary") Submit
-
             h2(class="mb-3") Rooms
-            ul(class="list-group")
+            ul(class="room-list list-group mb-3")
               button(class="list-group-item list-group-item-action") Room A
               button(class="list-group-item list-group-item-action") Room B
               button(class="list-group-item list-group-item-action") Room C
               button(class="list-group-item list-group-item-action") Room D
+            form(class="create-room-form w-100")
+              div(class="input-group")
+                input(type="text", class="form-control")
+                button(class="btn btn-primary") Create
           // chat component
           section(id="room-chat", class="p-3 col-md-7 col-11 d-flex flex-column mh-100")
-            h2(class="mb-3") Room Name
+            h2(id="chat-room-name-head", class="mb-3") Room Name
             div(class="mb-3 w-100 flex-grow-1 border rounded d-flex flex-column overflow-auto")
-              div(class="flex-grow-1 d-flex flex-column px-3")
+              div(id="chat-message-area", class="flex-grow-1 d-flex flex-column px-3")
                 div(class="my-2", style="max-width: 75%;")
                   h5 other user
                   p Lorem ipsum dolor sit amet.
@@ -67,7 +74,7 @@ html(lang="en")
                 div(class="my-2 align-self-end text-end", style="max-width: 75%;")
                   h5 you
                   p(class="rounded bg-primary-subtle p-2") Lorem ipsum dolor sit amet.
-            form(class="w-100")
+            form(id="send-message-form" class="w-100")
               div(class="input-group")
                 input(type="text", class="form-control")
                 button(class="btn btn-primary") Send
