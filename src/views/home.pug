@@ -10,17 +10,56 @@ html(lang="en")
   body
     main(class="p-3")
       // nickname-view
-      div(id="nickname-view" class="container")
-        div(class="row")
-          div(class="col")
-          div(class="col-lg-6 col-sm-10 col-11")
-            form(class="form-control p-3")
-              h1(class="mb-3") Welcome!!!
+      //div(id="nickname-view", class="container")
+      //  div(class="row")
+      //    div(class="col")
+      //    div(class="col-lg-6 col-sm-10 col-11")
+      //      form(class="form-control p-3")
+      //        h1(class="mb-3") Welcome!!!
+      //        div(class="mb-3")
+      //          label(for="nick-input" class="form-label") Enter Your Nickname
+      //          input(id="nick-input", class="form-control", type="text", required="true")
+      //        button(class="btn btn-primary") Submit
+      //    div(class="col")
+      // chat-view
+      div(id="chat-view", class="container")
+        // offcanvas controls
+        aside(id="drawer-control", class="offcanvas offcanvas-start d-md-none d-block")
+          div(class="offcanvas-header")
+            h5(class="offcanvas-title")
+            button(type="button" class="btn-close", data-bs-dismiss="offcanvas")
+          div(class="offcanvas-body")
+            h2(class="mb-3") Nickname
+            form(class="form-control py-3 mb-4")
               div(class="mb-3")
-                label(for="nick-input" class="form-label") Enter Your Nickname
-                input(id="nick-input", class="form-control", type="text", required="true")
-              button(class="btn btn-primary") Enter
-          div(class="col")
+                label(for="nick-input-drawer" class="form-label") Enter Your Nickname
+                input(id="nick-input-drawer", class="form-control", type="text", required="true")
+              button(class="btn btn-primary") Submit
+            h2(class="mb-3") Rooms
+            ul(class="list-group")
+              button(class="list-group-item list-group-item-action") Room A
+              button(class="list-group-item list-group-item-action") Room B
+              button(class="list-group-item list-group-item-action") Room C
+              button(class="list-group-item list-group-item-action") Room D
+        div(class="row justify-content-center")
+          div(id="drawer-switch-case", class="d-md-none d-block")
+            button(class="btn btn-primary", type="button", data-bs-toggle="offcanvas", data-bs-target="#drawer-control") Open Settings
+          aside(id="side-control", class="p-3 col-lg-3 col-md-5 d-md-block d-none")
+            h2(class="mb-3") Nickname
+            form(class="form-control py-3 mb-3")
+              div(class="mb-3")
+                label(for="nick-input-side" class="form-label") Enter Your Nickname
+                input(id="nick-input-side", class="form-control", type="text", required="true")
+              button(class="btn btn-primary") Submit
+
+            h2(class="mb-3") Rooms
+            ul(class="list-group")
+              button(class="list-group-item list-group-item-action") Room A
+              button(class="list-group-item list-group-item-action") Room B
+              button(class="list-group-item list-group-item-action") Room C
+              button(class="list-group-item list-group-item-action") Room D
+          section(id="room-chat", class="p-3 col-md-6 col 11")
+            h2(class="mb-3") Room Name
 
     script(src="/socket.io/socket.io.js")
     script(src="/public/app.js")
