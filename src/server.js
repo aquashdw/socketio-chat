@@ -15,16 +15,47 @@ const httpServer = http.createServer(app)
 const io = new Server(httpServer);
 
 io.on("connection", socket => {
-  socket.nickname = "Anonymous"
   // client sets username
-  socket.on("set_nickname", () => {});
+  socket.on("set_nickname", (nickname) => {
+    socket.nickname = nickname;
+  });
+  // client creates room
+  socket.on("create_room", (room) => {
+    if (socket.nickname === undefined) {
+      socket.emit("error", "Set Nickname");
+      return;
+    }
+    socket.room = room;
+    socket.join(room);
+    socket.to(room).emit("room_entered", socket.nickname);
+  });
   // client enters room
-  socket.on("enter_room", () => {});
+  socket.on("enter_room", (room) => {
+    if (socket.nickname === undefined) {
+      socket.emit("error", "Set Nickname");
+      return;
+    }
+    socket.room = room;
+    socket.join(room);
+    socket.to(room).emit("room_entered", socket.nickname);
+  });
   // client sends message
-  socket.on("send_message", () => {});
+  socket.on("send_message", (message) => {
+    if (socket.room === undefined) {
+      socket.emit("error", "Select a room");
+      return;
+    }
+    if (socket.nickname === undefined) {
+      socket.emit("error", "Set Nickname");
+      return;
+    }
+    socket.to(socket.room).emit("room_message", socket.nickname, message, false);
+    socket.emit("room_message", "You", message, true);
+  });
   // client pre-disconnect
   socket.on("disconnecting", () => {});
   // client post-disconnect
+  socket.on("disconnect", () => {});
 });
 
 const handleListen = () => console.log("using port 3000");
