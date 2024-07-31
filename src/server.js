@@ -14,5 +14,17 @@ app.get("/*", (req, res) => res.redirect("/"));
 const httpServer = http.createServer(app)
 const io = new Server(httpServer);
 
+io.on("connection", socket => {
+  // client sets username
+  socket.on("set_nickname", () => {});
+  // client enters room
+  socket.on("enter_room", () => {});
+  // client sends message
+  socket.on("send_message", () => {});
+  // client pre-disconnect
+  socket.on("disconnecting", () => {});
+  // client post-disconnect
+});
+
 const handleListen = () => console.log("using port 3000");
 httpServer.listen(3000, handleListen);
