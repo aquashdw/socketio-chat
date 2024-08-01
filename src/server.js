@@ -14,24 +14,28 @@ app.get("/*", (req, res) => res.redirect("/"));
 const httpServer = http.createServer(app)
 const io = new Server(httpServer);
 
-const publicRooms = () => {
-  const {sids, rooms} = io.sockets.adapter;
-  const publicRooms = [];
-  rooms.forEach((_, key) => {
-    if (sids.get(key) === undefined){
-      publicRooms.push(key);
-    }
-  });
-  return publicRooms;
-};
-
+// collect room info
 const countRoom = (roomName) => {
   const rooms = io.sockets.adapter.rooms;
   return rooms.get(roomName)?.size;
 };
 
+const getRoomList = () => {
+  const roomInfoList = [];
+  const {sids, rooms} = io.sockets.adapter;
+  const publicRooms = [];
+  rooms.forEach((_, room) => {
+    if (sids.get(room) === undefined) roomInfoList.push({
+      room, users: countRoom(room),
+    })
+  });
+  return roomInfoList;
+}
+
 
 io.on("connection", socket => {
+  socket.emit("rooms", getRoomList());
+
   // client sets username
   socket.on("set_nickname", (nickname, done) => {
     socket.nickname = nickname;
@@ -54,6 +58,7 @@ io.on("connection", socket => {
     // socket.to(room).emit("room_entered", socket.nickname, room);
     // socket.emit("room_entered", "You", room);
     io.sockets.in(room).emit("room_entered", socket.nickname, room);
+    io.sockets.emit("rooms", getRoomList());
   });
   // client sends message
   socket.on("send_message", (message) => {
@@ -73,9 +78,12 @@ io.on("connection", socket => {
     socket.rooms.forEach(room => {
       socket.to(room).emit("room_left", socket.nickname, room);
     });
+    io.sockets.emit("rooms", getRoomList());
   });
   // client post-disconnect
-  socket.on("disconnect", () => {});
+  socket.on("disconnect", () => {
+    io.sockets.emit("rooms", getRoomList());
+  });
 });
 
 const handleListen = () => console.log("using port 3000");

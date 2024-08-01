@@ -10,6 +10,7 @@ const nicknameHeads = document.querySelectorAll(".nickname-head");
 const nicknameForms = document.querySelectorAll(".nickname-form");
 const createRoomForms = document.querySelectorAll(".create-room-form")
 
+// utility functions
 const extractValue = (event, form) => {
   event.preventDefault();
   const input = form.querySelector("input");
@@ -23,6 +24,7 @@ const addMessageAndScroll = (element) => {
   chatMessageBody.scrollIntoView({ behavior: 'smooth', block: 'end' });
 };
 
+// drawer control (offcanvas)
 drawerControl.addEventListener("shown.bs.offcanvas", (_) => {
   document.getElementById("nick-input-drawer").focus();
 });
@@ -31,6 +33,7 @@ drawerControl.addEventListener("hidden.bs.offcanvas", (_) => {
   setTimeout(() => sendMessageForm.querySelector("input").focus(), 100);
 });
 
+// set nickname
 nicknameForms.forEach(form => form.addEventListener("submit", (event) => {
   const value = extractValue(event, form);
   if (value === "") return;
@@ -43,6 +46,7 @@ nicknameForms.forEach(form => form.addEventListener("submit", (event) => {
   });
 }));
 
+// create rooms
 createRoomForms.forEach(form => form.addEventListener("submit", (event) => {
   const value = extractValue(event, form);
   if (value === "") return;
@@ -55,6 +59,7 @@ createRoomForms.forEach(form => form.addEventListener("submit", (event) => {
   });
 }));
 
+// send message
 sendMessageForm.addEventListener("submit", (event) => {
   const value = extractValue(event, event.target);
   if (value === "") return;
@@ -62,7 +67,7 @@ sendMessageForm.addEventListener("submit", (event) => {
 });
 
 // update room info
-socket.on("rooms", () => {});
+socket.on("rooms", console.log);
 // message from current room
 socket.on("room_message", (nickname, message, me) => {
   const messageDiv = document.createElement("div");
@@ -85,6 +90,7 @@ socket.on("room_message", (nickname, message, me) => {
 
   addMessageAndScroll(messageDiv);
 });
+
 // somebody enters current room
 socket.on("room_entered", (nickname, room) => {
   const noticePara = document.createElement("p");
@@ -92,6 +98,7 @@ socket.on("room_entered", (nickname, room) => {
   noticePara.innerText = `${nickname} entered ${room}`;
   addMessageAndScroll(noticePara);
 });
+
 // somebody leaves current room
 socket.on("room_left", (nickname, room) => {
   const noticePara = document.createElement("p");
@@ -99,6 +106,7 @@ socket.on("room_left", (nickname, room) => {
   noticePara.innerText = `${nickname} left ${room}`;
   addMessageAndScroll(noticePara);
 });
+
 // server sends error
 socket.on("error", (message) => {
   alert(message);
