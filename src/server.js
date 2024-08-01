@@ -16,17 +16,19 @@ const io = new Server(httpServer);
 
 io.on("connection", socket => {
   // client sets username
-  socket.on("set_nickname", (nickname) => {
+  socket.on("set_nickname", (nickname, done) => {
     socket.nickname = nickname;
+    done();
   });
   // client creates room
-  socket.on("create_room", (room) => {
+  socket.on("create_room", (room, done) => {
     if (socket.nickname === undefined) {
       socket.emit("error", "Set Nickname");
       return;
     }
     socket.room = room;
     socket.join(room);
+    done();
     socket.to(room).emit("room_entered", socket.nickname);
   });
   // client enters room

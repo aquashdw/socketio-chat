@@ -1,5 +1,7 @@
 const socket = io();
 
+const drawerControl = document.getElementById("drawer-control");
+const offcanvas = new bootstrap.Offcanvas("#drawer-control");
 const chatRoomNameHead = document.getElementById("chat-room-name-head");
 const chatMessageBody = document.getElementById("chat-message-area");
 const sendMessageForm = document.getElementById("send-message-form");
@@ -21,23 +23,43 @@ const addMessageAndScroll = (element) => {
   chatMessageBody.scrollIntoView({ behavior: 'smooth', block: 'end' });
 };
 
-sendMessageForm.addEventListener("submit", (event) => {
-  const value = extractValue(event, event.target);
-  if (value === "") return;
-  socket.emit("send_message", value)
+drawerControl.addEventListener("shown.bs.offcanvas", (_) => {
+  document.getElementById("nick-input-drawer").focus();
+});
+
+drawerControl.addEventListener("hidden.bs.offcanvas", (_) => {
+  setTimeout(() => sendMessageForm.querySelector("input").focus(), 100);
 });
 
 nicknameForms.forEach(form => form.addEventListener("submit", (event) => {
   const value = extractValue(event, form);
   if (value === "") return;
-  socket.emit("set_nickname", value);
+  socket.emit("set_nickname", value, () => {
+    nicknameHeads.forEach(head => head.innerText = `Nickname: ${value}`);
+    event.target.parentElement
+        .querySelector(".create-room-form")
+        .querySelector("input")
+        .focus();
+  });
 }));
 
 createRoomForms.forEach(form => form.addEventListener("submit", (event) => {
   const value = extractValue(event, form);
   if (value === "") return;
-  socket.emit("create_room", value);
+  socket.emit("create_room", value, () => {
+    chatRoomNameHead.innerText = `Room: ${value}`;
+    if (drawerControl.contains(event.target)) {
+      offcanvas.hide();
+    }
+    else sendMessageForm.querySelector("input").focus();
+  });
 }));
+
+sendMessageForm.addEventListener("submit", (event) => {
+  const value = extractValue(event, event.target);
+  if (value === "") return;
+  socket.emit("send_message", value);
+});
 
 // update room info
 socket.on("rooms", () => {});

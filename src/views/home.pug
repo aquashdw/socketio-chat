@@ -53,17 +53,17 @@ html(lang="en")
                 button(class="btn btn-primary") Create
           // chat component
           section(id="room-chat", class="p-3 col-md-7 col-11 d-flex flex-column mh-100")
-            h2(id="chat-room-name-head", class="mb-3") Room Name
+            h2(id="chat-room-name-head", class="mb-3") Select a room
             div(class="mb-3 w-100 flex-grow-1 border rounded d-flex flex-column overflow-auto")
               div(id="chat-message-area", class="flex-grow-1 d-flex flex-column px-3 pt-3")
-                div(class="my-2 align-self-start", style="max-width: 75%;")
-                  h5 other user
-                  p(class="rounded bg-secondary-subtle p-2") Lorem ipsum dolor sit amet.
-                div(class="my-2 align-self-end text-end", style="max-width: 75%;")
-                  h5 you
-                  p(class="rounded bg-primary-subtle p-2") Lorem ipsum dolor sit amet.
-                p(class="my-2 p-2 w-75 rounded align-self-center text-center text-bg-info") Someone entered the room
-                p(class="my-2 p-2 w-75 rounded align-self-center text-center text-bg-warning") Someone left the room
+                //div(class="my-2 align-self-start", style="max-width: 75%;")
+                //  h5 other user
+                //  p(class="rounded bg-secondary-subtle p-2") Lorem ipsum dolor sit amet.
+                //div(class="my-2 align-self-end text-end", style="max-width: 75%;")
+                //  h5 you
+                //  p(class="rounded bg-primary-subtle p-2") Lorem ipsum dolor sit amet.
+                //p(class="my-2 p-2 w-75 rounded align-self-center text-center text-bg-info") Someone entered the room
+                //p(class="my-2 p-2 w-75 rounded align-self-center text-center text-bg-warning") Someone left the room
             form(id="send-message-form" class="w-100")
               div(class="input-group")
                 input(type="text", class="form-control")
@@ -73,6 +73,6 @@ html(lang="en")
               button(class="btn btn-primary", type="button", data-bs-toggle="offcanvas", data-bs-target="#drawer-control") Open Settings
 
 
+    script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js", integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz", crossorigin="anonymous")
     script(src="/socket.io/socket.io.js")
     script(src="/public/app.js")
-    script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js", integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz", crossorigin="anonymous")
