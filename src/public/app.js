@@ -18,17 +18,19 @@ const extractValue = (event, form) => {
 
 sendMessageForm.addEventListener("submit", (event) => {
   const value = extractValue(event, event.target);
+  if (value === "") return;
   socket.emit("send_message", value)
-  console.log(value);
 });
 
 nicknameForms.forEach(form => form.addEventListener("submit", (event) => {
   const value = extractValue(event, form);
+  if (value === "") return;
   socket.emit("set_nickname", value);
 }));
 
 createRoomForms.forEach(form => form.addEventListener("submit", (event) => {
   const value = extractValue(event, form);
+  if (value === "") return;
   socket.emit("create_room", value);
 }));
 
@@ -36,7 +38,26 @@ createRoomForms.forEach(form => form.addEventListener("submit", (event) => {
 socket.on("rooms", () => {});
 // message from current room
 socket.on("room_message", (nickname, message, me) => {
-  console.log(nickname, message, me);
+  const messageDiv = document.createElement("div");
+  const nicknameHead = document.createElement("h5");
+  const messageContent = document.createElement("p");
+  messageDiv.classList.add("my-2");
+  messageDiv.style.maxWidth = "75%";
+  nicknameHead.innerText = nickname;
+  messageContent.classList.add("rounded", "p-2");
+  messageContent.innerText = message;
+  if (me) {
+    messageDiv.classList.add("align-self-end", "text-end");
+    messageContent.classList.add("bg-primary-subtle");
+  }
+  else {
+    messageContent.classList.add("bg-secondary-subtle");
+  }
+  messageDiv.appendChild(nicknameHead);
+  messageDiv.appendChild(messageContent);
+
+  chatMessageBody.appendChild(messageDiv);
+  chatMessageBody.scrollIntoView({ behavior: 'smooth', block: 'end' });
 });
 // somebody enters current room
 socket.on("room_entered", () => {});
