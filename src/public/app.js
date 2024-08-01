@@ -16,6 +16,11 @@ const extractValue = (event, form) => {
   return value;
 };
 
+const addMessageAndScroll = (element) => {
+  chatMessageBody.appendChild(element);
+  chatMessageBody.scrollIntoView({ behavior: 'smooth', block: 'end' });
+};
+
 sendMessageForm.addEventListener("submit", (event) => {
   const value = extractValue(event, event.target);
   if (value === "") return;
@@ -41,7 +46,6 @@ socket.on("room_message", (nickname, message, me) => {
   const messageDiv = document.createElement("div");
   const nicknameHead = document.createElement("h5");
   const messageContent = document.createElement("p");
-  messageDiv.classList.add("my-2");
   messageDiv.style.maxWidth = "75%";
   nicknameHead.innerText = nickname;
   messageContent.classList.add("rounded", "p-2");
@@ -51,18 +55,28 @@ socket.on("room_message", (nickname, message, me) => {
     messageContent.classList.add("bg-primary-subtle");
   }
   else {
+    messageDiv.classList.add("align-self-start");
     messageContent.classList.add("bg-secondary-subtle");
   }
   messageDiv.appendChild(nicknameHead);
   messageDiv.appendChild(messageContent);
 
-  chatMessageBody.appendChild(messageDiv);
-  chatMessageBody.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  addMessageAndScroll(messageDiv);
 });
 // somebody enters current room
-socket.on("room_entered", () => {});
+socket.on("room_entered", (nickname) => {
+  const noticePara = document.createElement("p");
+  noticePara.classList.add("my-2", "p-2", "w-75", "rounded", "align-self-center", "text-center", "text-bg-info");
+  noticePara.innerText = `${nickname} entered the room`;
+  addMessageAndScroll(noticePara);
+});
 // somebody leaves current room
-socket.on("room_left", () => {});
+socket.on("room_left", (nickname) => {
+  const noticePara = document.createElement("p");
+  noticePara.classList.add("my-2", "p-2", "w-75", "rounded", "align-self-center", "text-center", "text-bg-warning");
+  noticePara.innerText = `${nickname} left the room`;
+  addMessageAndScroll(noticePara);
+});
 // server sends error
 socket.on("error", (message) => {
   alert(message);

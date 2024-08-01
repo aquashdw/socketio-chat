@@ -53,7 +53,11 @@ io.on("connection", socket => {
     socket.emit("room_message", "You", message, true);
   });
   // client pre-disconnect
-  socket.on("disconnecting", () => {});
+  socket.on("disconnecting", () => {
+    socket.rooms.forEach(room => {
+      socket.to(room).emit("room_left", socket.nickname);
+    });
+  });
   // client post-disconnect
   socket.on("disconnect", () => {});
 });
