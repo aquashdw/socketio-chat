@@ -48,6 +48,7 @@ createRoomForms.forEach(form => form.addEventListener("submit", (event) => {
   if (value === "") return;
   socket.emit("create_room", value, () => {
     chatRoomNameHead.innerText = `Room: ${value}`;
+    socket.emit("enter_room", value);
     if (drawerControl.contains(event.target)) {
       offcanvas.hide();
     }
@@ -86,17 +87,17 @@ socket.on("room_message", (nickname, message, me) => {
   addMessageAndScroll(messageDiv);
 });
 // somebody enters current room
-socket.on("room_entered", (nickname) => {
+socket.on("room_entered", (nickname, room) => {
   const noticePara = document.createElement("p");
   noticePara.classList.add("my-2", "p-2", "w-75", "rounded", "align-self-center", "text-center", "text-bg-info");
-  noticePara.innerText = `${nickname} entered the room`;
+  noticePara.innerText = `${nickname} entered ${room}`;
   addMessageAndScroll(noticePara);
 });
 // somebody leaves current room
-socket.on("room_left", (nickname) => {
+socket.on("room_left", (nickname, room) => {
   const noticePara = document.createElement("p");
   noticePara.classList.add("my-2", "p-2", "w-75", "rounded", "align-self-center", "text-center", "text-bg-warning");
-  noticePara.innerText = `${nickname} left the room`;
+  noticePara.innerText = `${nickname} left`;
   addMessageAndScroll(noticePara);
 });
 // server sends error

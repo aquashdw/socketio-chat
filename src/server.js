@@ -26,10 +26,7 @@ io.on("connection", socket => {
       socket.emit("error", "Set Nickname");
       return;
     }
-    socket.room = room;
-    socket.join(room);
     done();
-    socket.to(room).emit("room_entered", socket.nickname);
   });
   // client enters room
   socket.on("enter_room", (room) => {
@@ -39,7 +36,8 @@ io.on("connection", socket => {
     }
     socket.room = room;
     socket.join(room);
-    socket.to(room).emit("room_entered", socket.nickname);
+    socket.to(room).emit("room_entered", socket.nickname, room);
+    socket.emit("room_entered", "You", room);
   });
   // client sends message
   socket.on("send_message", (message) => {
