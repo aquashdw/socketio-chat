@@ -3,6 +3,7 @@ const socket = io();
 const drawerControl = document.getElementById("drawer-control");
 const offcanvas = new bootstrap.Offcanvas("#drawer-control");
 const chatRoomNameHead = document.getElementById("chat-room-name-head");
+const chatClearButton = document.getElementById("chat-clear-btn");
 const chatMessageBody = document.getElementById("chat-message-area");
 const sendMessageForm = document.getElementById("send-message-form");
 const roomLists = document.querySelectorAll(".room-list");
@@ -23,6 +24,10 @@ const addMessageAndScroll = (element) => {
   chatMessageBody.appendChild(element);
   chatMessageBody.scrollIntoView({ behavior: 'smooth', block: 'end' });
 };
+
+chatClearButton.addEventListener("click", (event) => {
+  chatMessageBody.innerHTML = ``;
+});
 
 // drawer control (offcanvas)
 drawerControl.addEventListener("shown.bs.offcanvas", (_) => {
