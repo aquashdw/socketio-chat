@@ -46,9 +46,8 @@ nicknameForms.forEach(form => form.addEventListener("submit", (event) => {
 createRoomForms.forEach(form => form.addEventListener("submit", (event) => {
   const value = extractValue(event, form);
   if (value === "") return;
-  socket.emit("create_room", value, () => {
+  socket.emit("enter_room", value, () => {
     chatRoomNameHead.innerText = `Room: ${value}`;
-    socket.emit("enter_room", value);
     if (drawerControl.contains(event.target)) {
       offcanvas.hide();
     }

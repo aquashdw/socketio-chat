@@ -14,22 +14,31 @@ app.get("/*", (req, res) => res.redirect("/"));
 const httpServer = http.createServer(app)
 const io = new Server(httpServer);
 
+const publicRooms = () => {
+  const {sids, rooms} = io.sockets.adapter;
+  const publicRooms = [];
+  rooms.forEach((_, key) => {
+    if (sids.get(key) === undefined){
+      publicRooms.push(key);
+    }
+  });
+  return publicRooms;
+};
+
+const countRoom = (roomName) => {
+  const rooms = io.sockets.adapter.rooms;
+  return rooms.get(roomName)?.size;
+};
+
+
 io.on("connection", socket => {
   // client sets username
   socket.on("set_nickname", (nickname, done) => {
     socket.nickname = nickname;
     done();
   });
-  // client creates room
-  socket.on("create_room", (room, done) => {
-    if (socket.nickname === undefined) {
-      socket.emit("error", "Set Nickname");
-      return;
-    }
-    done();
-  });
   // client enters room
-  socket.on("enter_room", (room) => {
+  socket.on("enter_room", (room, done) => {
     if (socket.nickname === undefined) {
       socket.emit("error", "Set Nickname");
       return;
@@ -40,6 +49,7 @@ io.on("connection", socket => {
     }
     socket.room = room;
     socket.join(room);
+    done();
     // maybe use in?
     // socket.to(room).emit("room_entered", socket.nickname, room);
     // socket.emit("room_entered", "You", room);
