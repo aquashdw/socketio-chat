@@ -67,7 +67,21 @@ sendMessageForm.addEventListener("submit", (event) => {
 });
 
 // update room info
-socket.on("rooms", console.log);
+const noRoomLi = document.createElement("li");
+noRoomLi.innerText = "No Rooms Yet";
+noRoomLi.classList.add("list-group-item", "disabled");
+socket.on("rooms", (roomInfoList) => {
+  console.log(roomInfoList.length !== 0);
+  roomLists.forEach(list => list.innerHTML = ``);
+  if(roomInfoList.length !== 0) roomInfoList.forEach(roomInfo => {
+    const roomButton = document.createElement("button");
+    roomButton.innerText = `${roomInfo.room} (${roomInfo.users})`;
+    roomButton.classList.add("list-group-item", "list-group-item-action");
+    roomLists.forEach(list => list.appendChild(roomButton.cloneNode(true)));
+  });
+  else roomLists.forEach(list => list.appendChild(noRoomLi.cloneNode(true)));
+});
+
 // message from current room
 socket.on("room_message", (nickname, message, me) => {
   const messageDiv = document.createElement("div");
