@@ -34,10 +34,16 @@ io.on("connection", socket => {
       socket.emit("error", "Set Nickname");
       return;
     }
+    if (socket.room !== undefined) {
+      io.sockets.in(socket.room).emit("room_left", socket.nickname, socket.room);
+      socket.leave(socket.room);
+    }
     socket.room = room;
     socket.join(room);
-    socket.to(room).emit("room_entered", socket.nickname, room);
-    socket.emit("room_entered", "You", room);
+    // maybe use in?
+    // socket.to(room).emit("room_entered", socket.nickname, room);
+    // socket.emit("room_entered", "You", room);
+    io.sockets.in(room).emit("room_entered", socket.nickname, room);
   });
   // client sends message
   socket.on("send_message", (message) => {
@@ -55,7 +61,7 @@ io.on("connection", socket => {
   // client pre-disconnect
   socket.on("disconnecting", () => {
     socket.rooms.forEach(room => {
-      socket.to(room).emit("room_left", socket.nickname);
+      socket.to(room).emit("room_left", socket.nickname, room);
     });
   });
   // client post-disconnect

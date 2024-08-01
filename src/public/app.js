@@ -97,7 +97,7 @@ socket.on("room_entered", (nickname, room) => {
 socket.on("room_left", (nickname, room) => {
   const noticePara = document.createElement("p");
   noticePara.classList.add("my-2", "p-2", "w-75", "rounded", "align-self-center", "text-center", "text-bg-warning");
-  noticePara.innerText = `${nickname} left`;
+  noticePara.innerText = `${nickname} left ${room}`;
   addMessageAndScroll(noticePara);
 });
 // server sends error
