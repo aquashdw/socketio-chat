@@ -22,7 +22,9 @@ html(lang="en")
                 label(for="nick-input-drawer", class="form-label") Enter Your Nickname
                 input(id="nick-input-drawer", class="form-control", type="text", required="true")
               button(class="btn btn-primary") Submit
-            h2(class="mb-3") Rooms
+            div(class="d-flex justify-content-between align-items-baseline")
+              h2 Rooms
+              p Click to enter
             ul(class="room-list list-group mb-3")
               //li(class="list-group-item disabled") No Rooms Yet
               //button(class="list-group-item list-group-item-action") Room A
@@ -42,7 +44,9 @@ html(lang="en")
                 label(for="nick-input-side", class="form-label") Enter Your Nickname
                 input(id="nick-input-side", class="form-control", type="text", required="true")
               button(class="btn btn-primary") Submit
-            h2(class="mb-3") Rooms
+            div(class="d-flex justify-content-between align-items-baseline")
+              h2 Rooms
+              p Click to enter
             ul(class="room-list list-group mb-3")
               //button(class="list-group-item list-group-item-action") Room A
               //button(class="list-group-item list-group-item-action") Room B

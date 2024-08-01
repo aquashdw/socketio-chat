@@ -8,8 +8,8 @@ app.set("view engine", "pug");
 app.set("views", __dirname + "/views");
 
 app.use("/public", express.static(__dirname + "/public"));
-app.get("/", (req, res) => res.render("home"));
-app.get("/*", (req, res) => res.redirect("/"));
+app.get("/", (_, res) => res.render("home"));
+app.get("/*", (_, res) => res.redirect("/"));
 
 const httpServer = http.createServer(app)
 const io = new Server(httpServer);
@@ -23,7 +23,6 @@ const countRoom = (roomName) => {
 const getRoomList = () => {
   const roomInfoList = [];
   const {sids, rooms} = io.sockets.adapter;
-  const publicRooms = [];
   rooms.forEach((_, room) => {
     if (sids.get(room) === undefined) roomInfoList.push({
       room, users: countRoom(room),
@@ -47,6 +46,7 @@ io.on("connection", socket => {
       socket.emit("error", "Set Nickname");
       return;
     }
+    if (socket.room === room) return;
     if (socket.room !== undefined) {
       io.sockets.in(socket.room).emit("room_left", socket.nickname, socket.room);
       socket.leave(socket.room);

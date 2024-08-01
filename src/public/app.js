@@ -74,10 +74,22 @@ socket.on("rooms", (roomInfoList) => {
   console.log(roomInfoList.length !== 0);
   roomLists.forEach(list => list.innerHTML = ``);
   if(roomInfoList.length !== 0) roomInfoList.forEach(roomInfo => {
-    const roomButton = document.createElement("button");
-    roomButton.innerText = `${roomInfo.room} (${roomInfo.users})`;
-    roomButton.classList.add("list-group-item", "list-group-item-action");
-    roomLists.forEach(list => list.appendChild(roomButton.cloneNode(true)));
+    const roomButtonBase = document.createElement("button");
+    roomButtonBase.innerText = `${roomInfo.room} (Users: ${roomInfo.users})`;
+    roomButtonBase.classList.add("list-group-item", "list-group-item-action", "px-3");
+    roomLists.forEach(list => {
+      const roomButton = roomButtonBase.cloneNode(true);
+      roomButton.addEventListener("click", (event) => {
+        socket.emit("enter_room", roomInfo.room, () => {
+          chatRoomNameHead.innerText = `Room: ${roomInfo.room}`;
+          if (drawerControl.contains(event.target)) {
+            offcanvas.hide();
+          }
+          else sendMessageForm.querySelector("input").focus();
+        });
+      });
+      list.appendChild(roomButton);
+    });
   });
   else roomLists.forEach(list => list.appendChild(noRoomLi.cloneNode(true)));
 });
